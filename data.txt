@@ -1,0 +1,83 @@
+
+MFCC
+
+KNN
+Acc: 0.366
+Time: 44.26
+
+SVM
+Acc: 0.47
+Time: 52.62
+
+Random_Forest
+Acc: 0.46
+Time: 59.22
+
+
+
+
+Mel-Spectrogram
+
+KNN
+Acc: 0.27
+Time: 25.14
+
+SVM
+Acc: 0.288
+Time: 25.96
+
+Random_Forest
+Acc: 0.45
+Time: 39.44
+
+
+
+
+Spectral Contrast
+
+KNN
+Acc: 0.288
+Time: 14.48
+
+SVM
+Acc: 0.366
+Time: 14.38
+
+Random_Forest
+Acc: 0.34
+Time: 16.81
+
+
+
+Zero Crossing Rate
+
+KNN
+Acc: 0.196
+Time: 11.9
+
+SVM
+Acc: 0.206
+Time: 11.19
+
+Random_Forest
+Acc: 0.206
+Time: 17.15
+
+
+
+
+Chroma STFT
+
+KNN
+Acc: 0.202
+Time: 22.78
+
+SVM
+Acc: 0.246
+Time: 19.97
+
+Random_Forest
+Acc: 0.27
+Time: 25.23
+
+
