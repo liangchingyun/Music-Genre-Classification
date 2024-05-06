@@ -51,7 +51,7 @@ def Data_Processing():
                         output_file.write(content)
                 n += 1
 
-Data_Processing()
+#Data_Processing()
 
 
 # Feature Extraction
