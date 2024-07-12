@@ -1,4 +1,3 @@
-import os
 import librosa
 import numpy as np
 import time
@@ -9,51 +8,6 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import f1_score, accuracy_score
 
 
-def Data_Processing():
-    # train test split percentage -> 80% train, 20% test
-    dd = os.listdir("dataset")
-    dd.remove('.DS_Store')
-    
-    folds = ['fold_1.txt', 'fold_2.txt', 'fold_3.txt', 'fold_4.txt', 'fold_5.txt']
-    
-    for i in range(len(dd)):
-        d2 = os.listdir("dataset/%s/" % (dd[i]))
-        d2.remove('.DS_Store')
-        for j in range(len(folds)):
-            if i == 0:
-                f = open(folds[j], 'w')
-            else:
-                f = open(folds[j], 'a')
-                
-            for k in range(j * 10, j * 10 + 10):
-                str = "dataset/%s/%s" % (dd[i], d2[k])
-                f.write("%s %d\n" % (str, i)) 
-            f.close()
-                
-    for i in range(len(folds)):
-        # testing data
-        with open('fold_%d.txt' % (i+1), 'r') as input_file:
-            content = input_file.read()
-        with open('test_%d.txt' % (i+1), 'w') as output_file:
-            output_file.write(content)
-            
-        # training data
-        n = 0
-        for file in folds:
-            if file != 'fold_%d.txt' % (i+1):
-                with open(file, "r") as input_file:
-                    content = input_file.read()
-                if n == 0:
-                    with open('train_%d.txt' % (i+1), 'w') as output_file:
-                        output_file.write(content)
-                else:
-                    with open('train_%d.txt' % (i+1), 'a') as output_file:
-                        output_file.write(content)
-                n += 1
-
-#Data_Processing()
-
-
 # Feature Extraction
 
 def Feature_Extraction_Model(file_path, method, max_pad_len=11):         
@@ -61,11 +15,11 @@ def Feature_Extraction_Model(file_path, method, max_pad_len=11):
     wave = wave[::3]
     # cut audio file
     i = 0
-    # 訓練資料的長度 (Drew:重點!)
+    # length of training data (important!)
     wav_length = 5334
-    # 聲音檔過長，擷取片段
+    # the audio file is too long, extract a segment.
     if len(wave) > wav_length:
-        # 尋找最大聲的點，取前後各半
+        # take the segments near the loudest point.
         i = np.argmax(wave)
         if i > (wav_length):
             wave = wave[i-int(wav_length/2):i+int(wav_length/2)]
@@ -89,7 +43,7 @@ def Feature_Extraction_Model(file_path, method, max_pad_len=11):
         pad_width = 0
         feature = feature[:, :11]
     feature = np.pad(feature, pad_width=((0, 0), (0, pad_width)),
-                  mode='constant')    # Drew: 邊緣填充, 避免邊緣訊息遺失
+                  mode='constant')    # edge padding, avoid loss of edge information.
     return feature
 
 
@@ -128,7 +82,7 @@ def load_audio(f, method):
         audio = Feature_Extraction_Model(fn, method)
 
         if audio is not None:  
-            vec = np.reshape(audio, [-1]) #展平為一維向量
+            vec = np.reshape(audio, [-1]) # flatten into 1D vector.
             audios.append(vec) 
             lab.append(int(label))
 
