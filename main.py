@@ -6,18 +6,21 @@ from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 from sklearn.metrics import f1_score, accuracy_score
+from sklearn.preprocessing import StandardScaler
 
 
 # Feature Extraction
 
 def Feature_Extraction_Model(file_path, method, max_pad_len=11):         
-    wave, sr = librosa.load(file_path, mono=True, sr=None)
-    wave = wave[::3]
+    wave, sr = librosa.load(file_path)
+
+    shift = np.random.uniform(-0.2, 0.2) * len(wave)
+    wave =  np.roll(wave, int(shift))
+
     # cut audio file
     i = 0
-    # length of training data (important!)
-    wav_length = 5334
-    # the audio file is too long, extract a segment.
+    wav_length = 5334 # length of training data
+    # if the audio file is too long, extract a segment.
     if len(wave) > wav_length:
         # take the segments near the loudest point.
         i = np.argmax(wave)
@@ -25,7 +28,7 @@ def Feature_Extraction_Model(file_path, method, max_pad_len=11):
             wave = wave[i-int(wav_length/2):i+int(wav_length/2)]
         else:
             wave = wave[0:wav_length]
-  
+
     if method == 'Wav2MFCC':
         feature = librosa.feature.mfcc(y=wave, sr=sr)
     elif method == 'MelSpec':
@@ -37,15 +40,14 @@ def Feature_Extraction_Model(file_path, method, max_pad_len=11):
     elif method == 'ChromaSTFT':
         feature = librosa.feature.chroma_stft(y=wave)
     
-    
     pad_width = max_pad_len - feature.shape[1]
     if pad_width < 0:
         pad_width = 0
         feature = feature[:, :11]
     feature = np.pad(feature, pad_width=((0, 0), (0, pad_width)),
                   mode='constant')    # edge padding, avoid loss of edge information.
+    
     return feature
-
 
 # Classfication Models
 
@@ -71,7 +73,7 @@ def Random_Forest(x, y, tx, ty):
 # Load Audio
 
 def load_audio(f, method):
-    t = 0
+    
     f=open(f)
     lines=f.readlines()
     audios, lab=[], []
@@ -86,35 +88,41 @@ def load_audio(f, method):
             audios.append(vec) 
             lab.append(int(label))
 
-        t += 1
-        print('\r' + '[Progress]:|%s%s|%.2f%%;' % ('█' * int(t * 20 / len(lines)), ' ' * (20 - int(t * 20 / len(lines))), float(t / len(lines) * 100)), end='')
-
+        
     audios= np.asarray(audios, np.float32)
     lab= np.asarray(lab, np.int32)
+
+    scaler = StandardScaler()
+    audios = scaler.fit_transform(audios)
     return audios, lab
 
 
 # Start Training
 
 start = time.time()
-
 accuracy = []
+t = 0
 for i in range(5):
-    x, y = load_audio('train_%d.txt' % (i+1), 'Wav2MFCC')
-    tx, ty = load_audio('test_%d.txt' % (i+1), 'Wav2MFCC')
-    #x, y = load_audio('train_%d.txt' % (i+1), 'MelSpec')
-    #tx, ty = load_audio('test_%d.txt' % (i+1), 'MelSpec')
-    #x, y = load_audio('train_%d.txt' % (i+1), 'SpecContrast')
-    #tx, ty = load_audio('test_%d.txt' % (i+1), 'SpecContrast')
-    #x, y = load_audio('train_%d.txt' % (i+1), 'ZeroCross')
-    #tx, ty = load_audio('test_%d.txt' % (i+1), 'ZeroCross')
-    #x, y = load_audio('train_%d.txt' % (i+1), 'ChromaSTFT')
-    #tx, ty = load_audio('test_%d.txt' % (i+1), 'ChromaSTFT')
-
-
-    #accuracy.append(KNN(x, y, tx, ty))
+    x, y = load_audio('train_test_data/train_%d.txt' % (i+1), 'Wav2MFCC')
+    #x, y = load_audio('train_test_data/train_%d.txt' % (i+1), 'MelSpec')
+    #x, y = load_audio('train_test_data/train_%d.txt' % (i+1), 'SpecContrast')
+    #x, y = load_audio('train_test_data/train_%d.txt' % (i+1), 'ZeroCross')
+    #x, y = load_audio('train_test_data/train_%d.txt' % (i+1), 'ChromaSTFT')
+    t += 1
+    print('\r' + '[Progress]:|%s%s|%.2f%%;' % ('█' * int(t), ' ' * (10 - int(t)), float(t / 10 * 100)), end='')
+    
+    tx, ty = load_audio('train_test_data/test_%d.txt' % (i+1), 'Wav2MFCC')
+    #tx, ty = load_audio('train_test_data/test_%d.txt' % (i+1), 'MelSpec')
+    #tx, ty = load_audio('train_test_data/test_%d.txt' % (i+1), 'SpecContrast')
+    #tx, ty = load_audio('train_test_data/test_%d.txt' % (i+1), 'ZeroCross')
+    #tx, ty = load_audio('train_test_data/test_%d.txt' % (i+1), 'ChromaSTFT')
+    t += 1
+    print('\r' + '[Progress]:|%s%s|%.2f%%;' % ('█' * int(t), ' ' * (10 - int(t)), float(t / 10 * 100)), end='')
+    
+    
+    accuracy.append(KNN(x, y, tx, ty))
     #accuracy.append(SVM(x, y, tx, ty))
-    accuracy.append(Random_Forest(x, y, tx, ty))
+    #accuracy.append(Random_Forest(x, y, tx, ty))
 
 end = time.time()
 

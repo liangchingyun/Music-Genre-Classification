@@ -2,16 +2,16 @@
 MFCC
 
 KNN
-Acc: 0.366
-Time: 44.26
+Acc: 0.396
+Time: 15.392482
 
 SVM
-Acc: 0.47
-Time: 52.62
+Acc: 0.562
+Time: 15.422079
 
 Random_Forest
-Acc: 0.46
-Time: 59.22
+Acc: 0.534
+Time: 17.430538
 
 
 
@@ -19,16 +19,16 @@ Time: 59.22
 Mel-Spectrogram
 
 KNN
-Acc: 0.27
+Acc: 0.296
 Time: 25.14
 
 SVM
-Acc: 0.288
-Time: 25.96
+Acc: 0.337
+Time: 15.316972
 
 Random_Forest
-Acc: 0.45
-Time: 39.44
+Acc: 0.366
+Time: 18.983801
 
 
 
@@ -36,12 +36,12 @@ Time: 39.44
 Spectral Contrast
 
 KNN
-Acc: 0.288
-Time: 14.48
+Acc: 0.352
+Time: 10.848413
 
 SVM
-Acc: 0.366
-Time: 14.38
+Acc: 0.43
+Time: 10.790195
 
 Random_Forest
 Acc: 0.34

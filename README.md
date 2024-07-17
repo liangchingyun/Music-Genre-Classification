@@ -1,27 +1,19 @@
 # Music Genre Classification
 
-This project includes classifiers for music genres. The dataset is organized into a `dataset` directory, which contains ten subdirectories, each representing a different music genre with 50 WAV files. The project utilizes three different classification models and employs five feature extraction methods.
+This project includes classifiers for music genres. The dataset is organized into the `dataset` directory, which contains ten subdirectories with different music genre, each with 50 WAV files. The project utilizes three different classification models and employs five feature extraction methods.
 
-## Dataset Split
+## Audio Features Used
+1. **Mel-Spectrogram**
+2. **Mel-Frequency Cepstral Coefficients (MFCC)**
+3. **Spectral Contrast**  
+4. **Zero Crossing Rate**
+5. **Chroma STFT**
 
-The dataset is split into training, validation, and test sets with the following proportions:
+## Classification Models
+1. **K-Nearest Neighbors (KNN)**
+2. **Support Vector Machine (SVM)**
+3. **Random Forest**
 
-- Training Set: 70%
-- Validation Set: 15%
-- Test Set: 15%
-
-## Training and Evaluation
-
-I train the model for 45 epochs. At the end of each epoch, the following metrics are recorded and plotted:
-
-- Training Loss
-- Validation Loss
-- Training Accuracy
-- Validation Accuracy
-
-These metrics, plotted against the number of epochs, help us observe and judge the training performance of the model.
-
-Finally, I evaluate the model's performance using the Test Loss and Test Accuracy.
 
 ## Usage
 
@@ -34,13 +26,17 @@ Finally, I evaluate the model's performance using the Test Loss and Test Accurac
     ```
     python main.py
     ```
+4. Customize the classifier and feature extraction method to use in the 'Start Training' section.
+
+
+
+
+
+
 
 ## Results and Analysis
-Training process metrics:
+
 
 ![image](https://github.com/liangchingyun/img-folder/blob/main/CNN-Classifier_result.png)
 
 
-Final test results:\
-Test Loss: 0.6178\
-Test Accuracy: 71.78%
