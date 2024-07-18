@@ -4,8 +4,7 @@ import time
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.cluster import KMeans
-from sklearn.metrics import f1_score, accuracy_score
+from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
 
 
@@ -99,7 +98,6 @@ def load_audio(f, method):
 
 # Start Training
 
-start = time.time()
 accuracy = []
 t = 0
 for i in range(5):
@@ -120,11 +118,9 @@ for i in range(5):
     print('\r' + '[Progress]:|%s%s|%.2f%%;' % ('█' * int(t), ' ' * (10 - int(t)), float(t / 10 * 100)), end='')
     
     
-    accuracy.append(KNN(x, y, tx, ty))
+    #accuracy.append(KNN(x, y, tx, ty))
     #accuracy.append(SVM(x, y, tx, ty))
-    #accuracy.append(Random_Forest(x, y, tx, ty))
+    accuracy.append(Random_Forest(x, y, tx, ty))
 
-end = time.time()
 
 print('\nAccuracy: ', np.mean(accuracy))
-print('Time: %f sec' %(end - start))
